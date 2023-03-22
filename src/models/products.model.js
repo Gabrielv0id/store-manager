@@ -1,4 +1,4 @@
-const connection = require('./db/connection');
+const connection = require('./connection');
 
 const findAll = async () => {
   const [result] = await connection.execute(
@@ -15,7 +15,6 @@ const findById = async (productId) => {
   );
   return product;
 };
-
 module.exports = {
   findAll,
   findById,
