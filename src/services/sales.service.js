@@ -5,7 +5,6 @@ const productsExist = async (sales) => {
 
   const productsIds = await Promise.all(promises);
 
-  console.log(productsIds);
   const productsList = productsIds.every((product) => product !== undefined);
 
   if (productsList) {

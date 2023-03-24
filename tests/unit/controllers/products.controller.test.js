@@ -92,7 +92,6 @@ describe('Teste de unidade do controller de products', function () {
       await productsController.registerProduct(req, res);
 
       // assert
-
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith(newProduct);
     });
