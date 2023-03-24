@@ -1,3 +1,5 @@
+const validName = "Clotis, Deusa do Destino";
+
 const products = [
   {
     id: 1,
@@ -13,6 +15,20 @@ const products = [
   }
 ]
 
+const newProduct = {
+  name: "Clotis, Deusa do Destino",
+}
+
+const registeredProduct = [
+  {
+  id: 1,
+  name: validName,
+  }
+]
+
 module.exports = {
   products,
+  newProduct,
+  validName,
+  registeredProduct,
 }

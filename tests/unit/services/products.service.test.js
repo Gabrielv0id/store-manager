@@ -3,7 +3,9 @@ const sinon = require('sinon');
 const { productsService } = require('../../../src/services');
 const { productsModel } = require('../../../src/models');
 
-const { products } = require('../../mocks/products.mock');
+const { products, validName, registeredProduct } = require('../../mocks/products.mock');
+const { findById } = require('../../../src/models/products.model');
+const { registerProduct } = require('../../../src/services/products.service');
 
 describe('Teste de unidade do service de produtos', function () {
   it('listagem de produtos',  async function () {
@@ -41,6 +43,21 @@ describe('Teste de unidade do service de produtos', function () {
     // assert
     expect(result.type).to.equal('PRODUCT_NOT_FOUND');
     expect(result.message).to.equal('Product not found');
+  });
+
+  describe('Registro de produto com valores corretos', function () {
+    it('retorna o Produto cadastrado', async function () {
+      // arrange
+      sinon.stub(productsModel, 'insert').resolves(1);
+      sinon.stub(productsModel, 'findById').resolves(registeredProduct[0]);
+
+      // act
+      const result = await productsService.registerProduct(validName);
+
+      // assert
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.be.deep.equal(registeredProduct[0]);
+    });
   });
 
   afterEach(function () {
