@@ -7,7 +7,7 @@ chai.use(sinonChai);
 
 const { productsService } = require('../../../src/services');
 const { productsController } = require('../../../src/controllers');
-const { products, newProduct } = require('../../mocks/products.mock');
+const { products, newProduct, productResponseUpdated } = require('../../mocks/products.mock');
 
 describe('Teste de unidade do controller de products', function () {
   describe('Listando todos os produtos', function () {
@@ -95,6 +95,44 @@ describe('Teste de unidade do controller de products', function () {
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith(newProduct);
     });
+  });
+
+  describe('Faz a alteração do nome de um produto pelo ID', function () {
+    it('Deve retornar o status 200 e os dados do produto alterado', async function () {
+      // arrange
+      const res = {};
+      const req = { params: { id: 1 }, body: { name: 'Martelo do Batman' } };
+      
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon
+        .stub(productsService, 'updateProduct').resolves({ type: null, message: productResponseUpdated[0] });
+      // act
+      await productsController.updateProduct(req, res);
+
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(productResponseUpdated[0]);
+    });
+  });
+
+  it('Ao passar um ID inválido deve retornar um erro', async function () {
+    // arrange
+      const res = {};
+      const req = { params: { id: 999 }, body: { name: 'Martelo do Batman' } };
+      
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon
+        .stub(productsService, 'updateProduct').resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+      // act
+      await productsController.updateProduct(req, res);
+
+      // assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
   });
 
   afterEach(function () {
