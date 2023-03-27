@@ -4,8 +4,6 @@ const { productsService } = require('../../../src/services');
 const { productsModel } = require('../../../src/models');
 
 const { products, validName, registeredProduct } = require('../../mocks/products.mock');
-const { findById } = require('../../../src/models/products.model');
-const { registerProduct } = require('../../../src/services/products.service');
 
 describe('Teste de unidade do service de produtos', function () {
   it('listagem de produtos',  async function () {

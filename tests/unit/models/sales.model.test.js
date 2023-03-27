@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { salesModel } = require('../../../src/models');
 const connection = require('../../../src/models/connection');
-const { validProductId, validProductQuantity, validSalesId } = require('../../mocks/sales.mock');
+const { validProductId, validProductQuantity, validSalesId, sales, saleById } = require('../../mocks/sales.mock');
 
 
 
@@ -25,6 +25,27 @@ describe('Testes de unidade do model de vendas', function () {
       // assert
       expect(result).to.equal(4);
     });
+  });
+  
+  describe('Recuperando a venda', function () {
+    it('listando todas as vendas', async function () {
+      // arrange
+      sinon.stub(connection, 'execute').resolves([sales]);
+      // act
+      const result = await salesModel.findAll();
+      // assert
+      expect(result).to.be.deep.equal(sales);
+    });
+
+    it('Recuperando uma venda a partir de seu ID', async function () {
+      // Arrange
+      sinon.stub(connection, 'execute').resolves([[saleById]]);
+      // Act
+      const result = await salesModel.findById(1);
+      // Assert
+      expect(result).to.be.deep.equal([saleById]);
+    });
+
   });
 
   afterEach(function () {
