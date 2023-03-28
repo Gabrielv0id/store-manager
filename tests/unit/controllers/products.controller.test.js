@@ -115,9 +115,8 @@ describe('Teste de unidade do controller de products', function () {
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(productResponseUpdated[0]);
     });
-  });
 
-  it('Ao passar um ID inválido deve retornar um erro', async function () {
+    it('Ao passar um ID inválido deve retornar um erro', async function () {
     // arrange
       const res = {};
       const req = { params: { id: 999 }, body: { name: 'Martelo do Batman' } };
@@ -133,7 +132,56 @@ describe('Teste de unidade do controller de products', function () {
       // assert
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
   });
+
+
+  describe('remove  um produto pelo ID', function () {
+    it('Deve retornar o status 204', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon
+        .stub(productsService, 'removeProduct').resolves({ type: null });
+      
+      // act
+      await productsController.removeProduct(req, res);
+
+      // assert
+      expect(res.status).to.have.been.calledWith(204);
+      expect(res.json).to.have.been.calledWith();
+    });
+
+    it('Ao passar um ID inválido deve retornar um erro', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: { id: 999 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon
+        .stub(productsService, 'removeProduct').resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+      
+      // act 
+      await productsController.removeProduct(req, res);
+
+      // assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+
+    });
+  });
+  
+
 
   afterEach(function () {
     sinon.restore();

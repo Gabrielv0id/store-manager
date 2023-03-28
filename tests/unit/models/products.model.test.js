@@ -52,6 +52,21 @@ describe('Testes de unidade do model de produtos', function () {
     });
   });
 
+  describe('removendo um produto', function () {
+    it('remove um produto do banco de dados pelo id', async function () {
+      // arrange
+      sinon.stub(connection, 'execute').resolves(productsUpdated);
+
+      const productId = 1;
+
+      // act
+      const result = await productsModel.remove(productId);
+
+      // assert
+      expect(result[0].affectedRows).to.be.deep.equal(1);
+    })
+  })
+
    afterEach(function () {
     sinon.restore();
    });

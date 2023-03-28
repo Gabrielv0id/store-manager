@@ -88,7 +88,37 @@ describe('Teste de unidade do service de produtos', function () {
 
       // assert
       expect(result.type).to.equal('PRODUCT_NOT_FOUND');
-    expect(result.message).to.equal('Product not found');
+      expect(result.message).to.equal('Product not found');
+    });
+  });
+
+  describe('faz a remoção de um produto', function () {
+    it('quando é passado um id correto', async function () {
+      // arrange
+      sinon.stub(productsModel, 'remove').resolves(true);
+      sinon.stub(productsModel, 'findById').resolves(products[0]);
+
+      const productId = 1;
+
+      // act
+      const result = await productsService.removeProduct(productId);
+
+      // assert
+      expect(result.type).to.be.equal(null);
+    });
+
+    it('trás um erro quando não acha um produto com o id passado', async function () {
+      // arrange
+      sinon.stub(productsModel, 'findById').resolves(undefined);
+
+      const productId = 1;
+
+      // act
+      const result = await productsService.removeProduct(productId);
+
+      // assert
+      expect(result.type).to.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.equal('Product not found');
     });
   });
   afterEach(function () {
