@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { salesModel } = require('../../../src/models');
 const connection = require('../../../src/models/connection');
-const { validProductId, validProductQuantity, validSalesId, sales, saleById } = require('../../mocks/sales.mock');
+const { validProductId, validProductQuantity, validSalesId, sales, saleById, removeSaleReturn } = require('../../mocks/sales.mock');
 
 
 
@@ -47,6 +47,21 @@ describe('Testes de unidade do model de vendas', function () {
     });
 
   });
+
+  describe('removendo uma venda', function () {
+    it('remove uma venda do banco de dados pelo id', async function () {
+      // arrange
+      sinon.stub(connection, 'execute').resolves(removeSaleReturn);
+
+      const saleId = 1;
+
+      // act
+      const result = await salesModel.remove(saleId);
+
+      // assert
+      expect(result[0].affectedRows).to.be.deep.equal(1);
+    })
+  })
 
   afterEach(function () {
     sinon.restore();

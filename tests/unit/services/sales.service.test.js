@@ -64,7 +64,37 @@ describe('Teste de unidade do service de vendas', function () {
     // assert
     expect(result.type).to.equal('SALE_NOT_FOUND');
     expect(result.message).to.equal('Sale not found');
+    });
   });
+
+  describe('faz a remoção de uma venda', function () {
+    it('quando é passado um id correto', async function () {
+      // arrange
+      sinon.stub(salesModel, 'remove').resolves(true);
+      sinon.stub(salesModel, 'findById').resolves(saleById);
+
+      const saleId = 1;
+
+      // act
+      const result = await salesService.removeSale(saleId);
+
+      // assert
+      expect(result.type).to.be.equal(null);
+    });
+
+    it('trás um erro quando não acha um produto com o id passado', async function () {
+      // arrange
+      sinon.stub(salesModel, 'findById').resolves([]);
+
+      const saleId = 1;
+
+      // act
+      const result = await salesService.removeSale(saleId);
+
+      // assert
+      expect(result.type).to.equal('SALE_NOT_FOUND');
+      expect(result.message).to.equal('Sale not found');
+    });
   });
   afterEach(function () {
      sinon.restore();

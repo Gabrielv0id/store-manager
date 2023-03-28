@@ -35,10 +35,21 @@ const registerSales = async (sales) => {
     return { type: null, message: { id: saleId, itemsSold: sales } };
   }
   return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
- };
+};
+ 
+const removeSale = async (id) => {
+  const findSale = await salesModel.findById(id);
+  
+  if (findSale.length === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+
+  await salesModel.remove(id);
+
+  return { type: null };
+};
 
 module.exports = {
   registerSales,
   findAll,
   findById,
+  removeSale,
 };
