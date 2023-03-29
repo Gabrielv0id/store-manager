@@ -83,6 +83,33 @@ const removeSaleReturn = [
   },
 ]
 
+const salesUpdated = [
+  {
+    fieldCount: 0,
+    affectedRows: 1,
+    insertId: 0,
+    info: 'Rows matched: 1  Changed: 1  Warnings: 0',
+    serverStatus: 2,
+    warningStatus: 0,
+    changedRows: 1,
+  },
+  undefined,
+]
+
+const saleUpdate = {
+  "saleId": 1,
+  "itemsUpdated": [
+   {
+      "productId": 1,
+      "quantity": 1
+    },
+    {
+      "productId": 2,
+      "quantity": 5
+    }
+  ]
+}
+
 
 module.exports = {
   validProductId,
@@ -94,4 +121,6 @@ module.exports = {
   sales,
   saleById,
   removeSaleReturn,
+  salesUpdated,
+  saleUpdate,
 }

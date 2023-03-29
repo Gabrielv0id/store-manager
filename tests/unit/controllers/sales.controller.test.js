@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { salesController } = require('../../../src/controllers');
 const { salesService } = require('../../../src/services');
-const { salesInput, saleRegistered, invalidSalesInput, sales, saleById } = require('../../mocks/sales.mock');
+const { salesInput, saleRegistered, invalidSalesInput, sales, saleById, saleUpdate } = require('../../mocks/sales.mock');
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -158,6 +158,72 @@ describe('Teste de unidade do controller de vendas', function () {
 
     });
   });
+
+  describe('Faz a alteração de uma venda pelo ID', function () {
+    it('Deve retornar o status 200 e os dados da venda alterado', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: { id: 1 },
+        body: salesInput,
+      };
+      
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon
+        .stub(salesService, 'updateSale').resolves({ type: null, message: saleUpdate });
+      // act
+      await salesController.updateSale(req, res);
+
+      // assert
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(saleUpdate);
+    });
+
+    it('Ao passar um ID inválido deve retornar um erro', async function () {
+    // arrange
+      const res = {};
+      const req = {
+        params: { id: 999 },
+        body: salesInput,
+      };
+      
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon
+        .stub(salesService, 'updateSale').resolves({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
+      // act
+      await salesController.updateSale(req, res);
+
+      // assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+    });
+
+    it('Ao passar um ID de produto inválido deve retornar um erro', async function () {
+      // arrange
+      const res = {};
+      const req = {
+        params: { id: 1 },
+        body: invalidSalesInput,
+      };
+      
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon
+        .stub(salesService, 'updateSale').resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+      // act
+      await salesController.updateSale(req, res);
+
+      // assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });

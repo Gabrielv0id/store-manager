@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { salesModel } = require('../../../src/models');
 const connection = require('../../../src/models/connection');
-const { validProductId, validProductQuantity, validSalesId, sales, saleById, removeSaleReturn } = require('../../mocks/sales.mock');
+const { validProductId, validProductQuantity, validSalesId, sales, saleById, removeSaleReturn, salesUpdated } = require('../../mocks/sales.mock');
 
 
 
@@ -62,6 +62,24 @@ describe('Testes de unidade do model de vendas', function () {
       expect(result[0].affectedRows).to.be.deep.equal(1);
     })
   })
+
+   describe('realizando um update de uma venda', function () {
+    it('verifica se a venda com o ID selecionado foi alterada', async function () {
+      // arrange
+      sinon.stub(connection, 'execute').resolves(salesUpdated);
+
+      const saleId = 1;
+      const productId = 2
+      const quantity = 4;
+
+      // act
+      const result = await salesModel.update(saleId, productId, quantity);
+
+      // assert
+      expect(result[0].affectedRows).to.be.deep.equal(1);
+      expect(result[0].changedRows).to.be.deep.equal(1);
+    });
+  });
 
   afterEach(function () {
     sinon.restore();

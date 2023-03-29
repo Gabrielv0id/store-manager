@@ -47,9 +47,28 @@ const removeSale = async (id) => {
   return { type: null };
 };
 
+const updateSale = async (sale, id) => {
+  const findSale = await salesModel.findById(id);
+
+  if (findSale.length === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+
+  if (await productsExist(sale)) {
+    const promises = sale.map(({ productId, quantity }) => (
+    salesModel.update(id, productId, quantity)
+    ));
+  
+    await Promise.all(promises);
+
+    return { type: null, message: { saleId: id, itemsUpdated: sale } };
+  }
+
+  return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+};
+
 module.exports = {
   registerSales,
   findAll,
   findById,
   removeSale,
+  updateSale,
 };
