@@ -8,9 +8,11 @@ router.get('/', productsController.listProducts);
 
 router.get('/:id', productsController.getProduct);
 
-router.put('/:id', registerProductsValidate, productsController.updateProduct);
+router.get('/search', productsController.searchProducts);
 
 router.post('/', registerProductsValidate, productsController.registerProduct);
+
+router.put('/:id', registerProductsValidate, productsController.updateProduct);
 
 router.delete('/:id', productsController.removeProduct);
 

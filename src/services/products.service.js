@@ -39,10 +39,21 @@ const removeProduct = async (id) => {
   return { type: null };
 };
 
+const searchProducts = async (q) => {
+    if (!q) {
+    const products = await productsModel.findAll();
+    return { type: null, message: products };
+    }
+  const products = await productsModel.findAll();
+  const fillteredProduct = products.filter((product) => product.name.includes(q));
+  return { type: null, message: fillteredProduct };
+};
+
 module.exports = {
   findAll,
   findById,
   registerProduct,
   updateProduct,
   removeProduct,
+  searchProducts,
 };
